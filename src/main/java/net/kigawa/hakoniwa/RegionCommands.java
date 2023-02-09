@@ -27,6 +27,7 @@ public class RegionCommands implements CommandExecutor {
                     range.getConfig().setValue("location", p.getLocation());
                     range.getConfig().saveConfig();
                     range.getConfig().reloadConfig();
+                    range.setBound();
                     p.sendMessage(Utils.message("§aここの地点に新たに建築範囲を設定しました"));
                     if (range.loadData()) {
                         p.sendMessage(Utils.message("§a建築可能範囲データをロードしました！！"));

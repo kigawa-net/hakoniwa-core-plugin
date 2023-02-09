@@ -9,12 +9,15 @@ public class Range {
 
     Player p;
     ConfigPlayerData config;
+    Bound bound;
     Location rangePoint;
-    final int POSSIBLE_RANGE = HakoniwaCore.getPlugin().getConfig().getInt("range");
 
     public Range(Player p) {
         this.p = p;
         config = new ConfigPlayerData(p);
+        if (loadData()) {
+            bound = new Bound((Location) getConfig().getValue("location"));
+        }
     }
 
     public Player getP() {
@@ -29,8 +32,8 @@ public class Range {
         return rangePoint;
     }
 
-    public int getPOSSIBLE_RANGE() {
-        return POSSIBLE_RANGE;
+    public Bound getBound() {
+        return bound;
     }
 
     public boolean loadData() {
@@ -40,6 +43,10 @@ public class Range {
         } else {
             return false;
         }
+    }
+
+    public void setBound() {
+        bound = new Bound((Location) getConfig().getValue("location"));
     }
 
 }
