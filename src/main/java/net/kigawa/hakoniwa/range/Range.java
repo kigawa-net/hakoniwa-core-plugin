@@ -1,5 +1,6 @@
 package net.kigawa.hakoniwa.range;
 
+import net.kigawa.hakoniwa.HakoniwaCore;
 import net.kigawa.hakoniwa.data.ConfigPlayerData;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -9,7 +10,7 @@ public class Range {
     Player p;
     ConfigPlayerData config;
     Location rangePoint;
-    final int POSSIBLE_RANGE = (int) getConfig().getValue("range");
+    final int POSSIBLE_RANGE = HakoniwaCore.getPlugin().getConfig().getInt("range");
 
     public Range(Player p) {
         this.p = p;

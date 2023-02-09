@@ -1,15 +1,14 @@
-package net.kigawa.hakoniwa.commands;
+package net.kigawa.hakoniwa;
 
-import net.kigawa.hakoniwa.HakoniwaCore;
-import net.kigawa.hakoniwa.Utils;
 import net.kigawa.hakoniwa.range.Range;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class Commands implements CommandExecutor {
+public class RegionCommands implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
@@ -19,7 +18,7 @@ public class Commands implements CommandExecutor {
         if (!HakoniwaCore.playerDataMap.isPlayer(p)) return true;
 
         if (strings.length == 0) {
-            p.sendMessage("§cサブコマンドを入力してください");
+            p.sendMessage(Utils.message("§cサブコマンドを入力してください"));
             return true;
         } else {
             if (strings[0].equals("create")) {
@@ -37,10 +36,30 @@ public class Commands implements CommandExecutor {
                 } else {
                     p.sendMessage(Utils.message("§c既に建築できる範囲を指定しています"));
                 }
-                return true;
+            } else if (strings[0].equals("info")) {
+                Range range = HakoniwaCore.playerDataMap.getData(p);
+                p.sendMessage(infoLoc(p, range.getRangePoint()));
+            } else {
+                p.sendMessage(Utils.message("§c関係のないコマンドを入力しています"));
             }
         }
-
         return true;
     }
+
+    public String infoLoc(Player p, Location loc) {
+
+        int x = (int) loc.getX();
+        int y = (int) loc.getY();
+        int z = (int) loc.getZ();
+
+        String info = "§f§l" + p.getName() + "§bさんの建築可能範囲(中心座標)\n" +
+                "§d---------------\n" +
+                "§fX: " + x + "\n" +
+                "§fY: " + y + "\n" +
+                "§fZ: " + z + "\n" +
+                "§d---------------";
+
+        return info;
+    }
+
 }
