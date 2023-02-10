@@ -23,6 +23,7 @@ public class MainListener implements Listener {
         range.getConfig().createPlayerFile();
         if (range.loadData()) {
             p.sendMessage(Utils.message("§a建築可能範囲データをロードしました！！"));
+            p.sendMessage(String.valueOf(range.getBound().getPOSSIBLE_RANGE()));
         }
     }
 
@@ -40,8 +41,19 @@ public class MainListener implements Listener {
         Player p = e.getPlayer();
         Range range = HakoniwaCore.playerDataMap.getData(p);
 
+        if (!range.isHasRange()) return;
+
         if (range.getBound().isPlayerWithinBound(p.getLocation())) {
+            if (!range.isInBound()) {
+                range.setInBound(true);
+            }
             p.sendMessage("範囲内！！");
+            return;
+        }
+
+        if (range.isInBound()) {
+            range.setInBound(false);
+            p.sendMessage("範囲から出ました");
         }
 
     }

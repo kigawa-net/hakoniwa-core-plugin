@@ -40,8 +40,16 @@ public class Bound {
     }
 
     public void setMinMaxLoc() {
-        setMinLoc(point.add(-POSSIBLE_RANGE, 0, -POSSIBLE_RANGE));
-        setMaxLoc(point.add(POSSIBLE_RANGE, 0, POSSIBLE_RANGE));
+        Location locMinClone = point, locMaxClone = point;
+
+        locMinClone.setX(point.getX() - POSSIBLE_RANGE);
+        locMinClone.setZ(point.getZ() - POSSIBLE_RANGE);
+
+        locMaxClone.setX(point.getX() + POSSIBLE_RANGE);
+        locMaxClone.setZ(point.getZ() + POSSIBLE_RANGE);
+
+        setMinLoc(locMinClone);
+        setMaxLoc(locMaxClone);
     }
 
     public boolean isPlayerWithinBound(Location loc) {

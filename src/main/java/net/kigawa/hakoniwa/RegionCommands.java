@@ -26,6 +26,8 @@ public class RegionCommands implements CommandExecutor {
                 if (range.getRangePoint() == null) {
                     range.getConfig().setValue("location", p.getLocation());
                     range.getConfig().saveConfig();
+                    range.getConfig().setValue("hasRange", true);
+                    range.getConfig().saveConfig();
                     range.getConfig().reloadConfig();
                     range.setBound();
                     p.sendMessage(Utils.message("§aここの地点に新たに建築範囲を設定しました"));
@@ -39,6 +41,7 @@ public class RegionCommands implements CommandExecutor {
                 }
             } else if (strings[0].equals("info")) {
                 Range range = HakoniwaCore.playerDataMap.getData(p);
+                if (range.getRangePoint() == null) return true;
                 p.sendMessage(infoLoc(p, range.getRangePoint()));
             } else {
                 p.sendMessage(Utils.message("§c関係のないコマンドを入力しています"));

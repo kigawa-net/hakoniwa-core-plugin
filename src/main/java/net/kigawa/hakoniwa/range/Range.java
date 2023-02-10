@@ -1,27 +1,21 @@
 package net.kigawa.hakoniwa.range;
 
-import net.kigawa.hakoniwa.HakoniwaCore;
 import net.kigawa.hakoniwa.data.ConfigPlayerData;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class Range {
 
-    Player p;
-    ConfigPlayerData config;
-    Bound bound;
-    Location rangePoint;
+    private Player p;
+    private ConfigPlayerData config;
+    private Bound bound;
+    private Location rangePoint;
+    private boolean isInBound = false;
+    private boolean isHasRange;
 
     public Range(Player p) {
         this.p = p;
         config = new ConfigPlayerData(p);
-        if (loadData()) {
-            bound = new Bound((Location) getConfig().getValue("location"));
-        }
-    }
-
-    public Player getP() {
-        return p;
     }
 
     public ConfigPlayerData getConfig() {
@@ -36,16 +30,33 @@ public class Range {
         return bound;
     }
 
+    public boolean isInBound() {
+        return isInBound;
+    }
+
+    public void setInBound(boolean inBound) {
+        isInBound = inBound;
+    }
+
+    public boolean isHasRange() {
+        return isHasRange;
+    }
+
     public boolean loadData() {
-        rangePoint = (Location) config.getValue("location");
-        if (rangePoint != null) {
+        isHasRange = (boolean) config.getValue("hasRange");
+        if (isHasRange) {
+            rangePoint = (Location) config.getValue("location");
+            bound = new Bound((Location) getConfig().getValue("location"));
+            p.sendMessage("インスタンスを作成");
             return true;
         } else {
+            p.sendMessage("インスタンスを作sssss成");
             return false;
         }
     }
 
     public void setBound() {
+        if (bound != null) return;
         bound = new Bound((Location) getConfig().getValue("location"));
     }
 

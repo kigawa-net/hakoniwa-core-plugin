@@ -29,7 +29,16 @@ public class ConfigPlayerData {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+
             p.sendMessage(Utils.message("プレイヤーデータを作成しました"));
+            YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(file);
+            defaultConfig.set("hasRange", false);
+
+            try {
+                defaultConfig.save(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         config = YamlConfiguration.loadConfiguration(file);
@@ -65,7 +74,6 @@ public class ConfigPlayerData {
             throw new RuntimeException(e);
         }
     }
-
 
 }
 
