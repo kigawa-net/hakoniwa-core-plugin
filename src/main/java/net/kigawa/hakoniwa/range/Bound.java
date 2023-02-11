@@ -40,7 +40,8 @@ public class Bound {
     }
 
     public void setMinMaxLoc() {
-        Location locMinClone = point, locMaxClone = point;
+        Location locMinClone = point.clone();
+        Location locMaxClone = point.clone();
 
         locMinClone.setX(point.getX() - POSSIBLE_RANGE);
         locMinClone.setZ(point.getZ() - POSSIBLE_RANGE);

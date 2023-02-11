@@ -30,4 +30,9 @@ public class PlayerDataMap {
             data.remove(p);
         }
     }
+
+    public void clearMap() {
+        data.clear();
+    }
+
 }

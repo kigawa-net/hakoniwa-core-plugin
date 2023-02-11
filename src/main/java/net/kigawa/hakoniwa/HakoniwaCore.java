@@ -20,11 +20,14 @@ public class HakoniwaCore extends JavaPlugin {
 
     private static HakoniwaCore plugin;
 
+    private static String world = "world";
+
     @Override
     public void onEnable() {
         plugin = this;
         saveDefaultConfig();
         setup();
+        world = (String) getConfig().get("world");
 
         getServer().getPluginManager().registerEvents(new MainListener(), this);
         getCommand("mrn").setExecutor(new RegionCommands());
@@ -34,10 +37,15 @@ public class HakoniwaCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        playerDataMap.clearMap();
     }
 
     public static HakoniwaCore getPlugin() {
         return plugin;
+    }
+
+    public static String getWorldName() {
+        return world;
     }
 
     public void setup() {

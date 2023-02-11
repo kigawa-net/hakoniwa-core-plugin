@@ -47,12 +47,16 @@ public class Range {
         if (isHasRange) {
             rangePoint = (Location) config.getValue("location");
             bound = new Bound((Location) getConfig().getValue("location"));
-            p.sendMessage("インスタンスを作成");
             return true;
         } else {
-            p.sendMessage("インスタンスを作sssss成");
             return false;
         }
+    }
+
+    public void resetBound() {
+        bound = null;
+        rangePoint = null;
+        loadData();
     }
 
     public void setBound() {
