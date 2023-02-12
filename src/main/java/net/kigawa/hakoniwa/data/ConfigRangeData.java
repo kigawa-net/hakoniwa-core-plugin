@@ -1,27 +1,19 @@
 package net.kigawa.hakoniwa.data;
 
 import net.kigawa.hakoniwa.HakoniwaCore;
-import net.kigawa.hakoniwa.Utils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
 
-public class ConfigPlayerData {
+public class ConfigRangeData {
 
-    HakoniwaCore plugin = HakoniwaCore.getPlugin();
-    Player p;
     File file;
     YamlConfiguration config;
 
-    public ConfigPlayerData(Player p) {
-        this.p = p;
-    }
-
-    public void createPlayerFile() {
-        File file = new File(plugin.getDataFolder() + "/PlayerData/", p.getUniqueId() + ".yml");
+    public void createFile() {
+        File file = new File(HakoniwaCore.getPlugin().getDataFolder(), "data.yml");
 
         if (!file.exists()) {
             try {
@@ -30,7 +22,6 @@ public class ConfigPlayerData {
                 throw new RuntimeException(e);
             }
 
-            p.sendMessage(Utils.message("プレイヤーデータを作成しました"));
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(file);
             defaultConfig.set("hasRange", false);
 

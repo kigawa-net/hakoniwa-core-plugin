@@ -1,23 +1,23 @@
 package net.kigawa.hakoniwa.data;
 
-import net.kigawa.hakoniwa.range.Range;
+import net.kigawa.hakoniwa.range.PlayerRange;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerDataMap {
-    private final Map<Player, Range> data = new HashMap<>();
+public class PlayerRangeMap {
+    private final Map<Player, PlayerRange> data = new HashMap<>();
 
-    public Range getData(Player p) {
+    public PlayerRange getData(Player p) {
         return data.get(p);
     }
 
-    public void putData(Player p, Range range) {
+    public void putData(Player p, PlayerRange range) {
         data.put(p, range);
     }
 
-    public boolean isPlayer(Player p) {
+    public boolean isLoaded(Player p) {
         if (data.containsKey(p)) {
             return true;
         } else {
@@ -26,7 +26,7 @@ public class PlayerDataMap {
     }
 
     public void removePlayer(Player p) {
-        if (isPlayer(p)) {
+        if (isLoaded(p)) {
             data.remove(p);
         }
     }

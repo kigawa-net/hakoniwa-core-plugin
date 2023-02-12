@@ -1,8 +1,10 @@
 package net.kigawa.hakoniwa;
 
-import net.kigawa.hakoniwa.data.PlayerDataMap;
+import net.kigawa.hakoniwa.data.PlayerRangeMap;
 import net.kigawa.hakoniwa.listener.MainListener;
+import net.kigawa.hakoniwa.range.Range;
 import org.bukkit.plugin.java.*;
+import org.bukkit.plugin.java.annotation.command.Command;
 import org.bukkit.plugin.java.annotation.dependency.*;
 import org.bukkit.plugin.java.annotation.plugin.*;
 import org.bukkit.plugin.java.annotation.plugin.author.*;
@@ -13,21 +15,32 @@ import java.io.File;
 @Author("kigawa.net")
 @Dependency("CommandAPI")
 @Dependency("WorldGuard")
+@Command(name = "mrn", desc = "/mrn <subcommand>")
 
 public class HakoniwaCore extends JavaPlugin {
 
-    public static PlayerDataMap playerDataMap = new PlayerDataMap();
+    public static PlayerRangeMap playerRangeMap = new PlayerRangeMap();
+
+    private static Range range = new Range();
 
     private static HakoniwaCore plugin;
 
     private static String world = "world";
 
+
     @Override
     public void onEnable() {
         plugin = this;
-        saveDefaultConfig();
+        world = getConfig().getString("world");
         setup();
-        world = (String) getConfig().get("world");
+        range.getConfig().createFile();
+        saveDefaultConfig();
+
+        if (range.loadData()) {
+            getLogger().info("建築範囲をロードしました");
+        } else {
+            getLogger().info("建築範囲がロードできませんでした");
+        }
 
         getServer().getPluginManager().registerEvents(new MainListener(), this);
         getCommand("mrn").setExecutor(new RegionCommands());
@@ -37,7 +50,6 @@ public class HakoniwaCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        playerDataMap.clearMap();
     }
 
     public static HakoniwaCore getPlugin() {
@@ -48,8 +60,12 @@ public class HakoniwaCore extends JavaPlugin {
         return world;
     }
 
+    public static Range getRange() {
+        return range;
+    }
+
     public void setup() {
-        File file = new File(plugin.getDataFolder() + "/PlayerData/", "");
+        File file = new File(plugin.getDataFolder().toURI());
         if (!file.exists()) {
             if (file.mkdir()) {
                 plugin.getLogger().info("プレイヤーデータフォルダを作成しました");
@@ -60,3 +76,4 @@ public class HakoniwaCore extends JavaPlugin {
     }
 
 }
+
