@@ -36,14 +36,8 @@ public class ConfigRangeData {
         this.file = file;
     }
 
-    public void setValue(String str, Object value) {
-        if (config == null) return;
-        config.set(str, value);
-    }
-
-    public Object getValue(String value) {
-        if (config == null) return null;
-        return config.get(value);
+    public YamlConfiguration get() {
+        return config;
     }
 
     public void saveConfig() {

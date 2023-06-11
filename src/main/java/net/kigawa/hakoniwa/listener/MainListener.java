@@ -6,12 +6,17 @@ import net.kigawa.hakoniwa.range.PlayerRange;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MainListener implements Listener {
 
@@ -46,7 +51,7 @@ public class MainListener implements Listener {
 
         if (!HakoniwaCore.getRange().isHasRange()) return;
 
-        if (HakoniwaCore.getRange().getBound().isPlayerWithinBound(p.getLocation())) {
+        if (HakoniwaCore.getRange().getBound().isInBound(p.getLocation())) {
             // 範囲内に入ったときの初期処理
             if (!playerRange.isInBound()) {
                 playerRange.setInBound(true);
@@ -65,22 +70,41 @@ public class MainListener implements Listener {
     }
 
     @EventHandler
-    public void onSetBlock(BlockPlaceEvent e) {
+    public void onPlaceBlock(BlockPlaceEvent e) {
 
-        if (!e.getPlayer().getWorld().getName().equals(HakoniwaCore.getWorldName())) return;
-        if(!HakoniwaCore.playerRangeMap.isLoaded(e.getPlayer())) return;
+        if (!e.getPlayer().getWorld().getName().equals(HakoniwaCore.getWorldName()) || !HakoniwaCore.playerRangeMap.isLoaded(e.getPlayer())) return;
 
         Player p = e.getPlayer();
 
-        if (p.getGameMode().equals(GameMode.CREATIVE)) return;
+        blockEvent(e, p);
 
-        Location block = e.getBlock().getLocation();
+    }
 
-        if (!HakoniwaCore.getRange().getBound().isPlayerWithinBound(block)) {
-            e.setCancelled(true);
-            p.sendMessage(Utils.message("§cここにブロックを置くことは出来ません"));
+    @EventHandler
+    public void onBreakBlock(BlockBreakEvent e) {
+
+        if (!e.getPlayer().getWorld().getName().equals(HakoniwaCore.getWorldName()) || !HakoniwaCore.playerRangeMap.isLoaded(e.getPlayer())) return;
+
+        Player p = e.getPlayer();
+
+        blockEvent(e, p);
+
+    }
+
+    private void blockEvent(@NotNull BlockEvent blockEvent, @Nullable Player player) {
+        final var block = blockEvent.getBlock();
+        if (!(blockEvent instanceof Cancellable cancellable)) return;
+
+        if (!block.getWorld().getName().equals(HakoniwaCore.getWorldName())) return;
+
+        if (player != null && player.getGameMode().equals(GameMode.CREATIVE)) return;
+
+        Location blockLocation = block.getLocation();
+
+        if (!HakoniwaCore.getRange().getBound().isInBound(blockLocation)) {
+            cancellable.setCancelled(true);
+            if (player != null) player.sendMessage(Utils.message("§cここにブロックを置くことは出来ません"));
         }
-
     }
 
 }

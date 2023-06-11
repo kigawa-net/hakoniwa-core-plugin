@@ -30,16 +30,21 @@ public class HakoniwaCore extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
         plugin = this;
+
         world = getConfig().getString("world");
+
         setup();
+
         range.getConfig().createFile();
+
         saveDefaultConfig();
 
         if (range.loadData()) {
             getLogger().info("建築範囲をロードしました");
         } else {
-            getLogger().info("建築範囲がロードできませんでした");
+            getLogger().info("建築範囲が設定されていないためロードできませんでした");
         }
 
         getServer().getPluginManager().registerEvents(new MainListener(), this);
@@ -65,7 +70,7 @@ public class HakoniwaCore extends JavaPlugin {
     }
 
     public void setup() {
-        File file = new File(plugin.getDataFolder().toURI());
+        File file = plugin.getDataFolder();
         if (!file.exists()) {
             if (file.mkdir()) {
                 plugin.getLogger().info("プレイヤーデータフォルダを作成しました");

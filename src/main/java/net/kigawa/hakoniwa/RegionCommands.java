@@ -34,41 +34,64 @@ public class RegionCommands implements CommandExecutor {
         }
 
         if (strings[0].equals("info")) {
+
+            if (HakoniwaCore.getRange().getRangePoint() == null) {
+                p.sendMessage(Utils.message("§cまだ建築範囲が設定されていません"));
+                return true;
+            }
+
             p.sendMessage(infoLoc());
             Utils.goodSound(p);
         }
 
         if (strings[0].equals("create")) {
+
             Range range = HakoniwaCore.getRange();
+
             if (range.getRangePoint() == null) {
-                range.getConfig().setValue("location", p.getLocation());
+
+                range.getConfig().get().set("location", p.getLocation());
                 range.getConfig().saveConfig();
-                range.getConfig().setValue("hasRange", true);
+
+                range.getConfig().get().set("hasRange", true);
                 range.getConfig().saveConfig();
+
                 range.getConfig().reloadConfig();
-                range.setBound();
+                range.loadData();
+
                 p.sendMessage(Utils.message("§aここの地点に新たに建築範囲を設定しました"));
+
                 Utils.goodSound(p);
+
                 if (range.loadData()) {
                     p.sendMessage(Utils.message("§a建築可能範囲データをロードしました！！"));
                 } else {
-                    p.sendMessage(Utils.message("§c建築可能範囲データをロード中にエラーが発生しました。エラーコード #1000"));
+                    p.sendMessage(Utils.message("§c建築可能範囲データをロード中にエラーが発生しました"));
                 }
+
             } else {
                 p.sendMessage(Utils.message("§c既に建築できる範囲を指定しています"));
                 Utils.errorSound(p);
             }
+
             Utils.goodSound(p);
+
         } else if (strings[0].equals("remove")) {
             Range range = HakoniwaCore.getRange();
             if (range.isHasRange()) {
-                range.getConfig().setValue("location", "");
+
+                range.getConfig().get().set("location", "");
                 range.getConfig().saveConfig();
-                range.getConfig().setValue("hasRange", false);
+
+                range.getConfig().get().set("hasRange", false);
                 range.getConfig().saveConfig();
+
                 range.getConfig().reloadConfig();
+
                 range.resetBound();
+
                 p.sendMessage(Utils.message("§a建築範囲を削除しました"));
+
                 Utils.goodSound(p);
             } else {
                 p.sendMessage(Utils.message("§cまだ建築可能範囲を所有していません"));

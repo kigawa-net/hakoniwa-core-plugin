@@ -31,26 +31,22 @@ public class Range {
     }
 
     public boolean loadData() {
-        isHasRange = (boolean) config.getValue("hasRange");
+        isHasRange = (boolean) config.get().getBoolean("hasRange");
+
         if (isHasRange) {
-            rangePoint = (Location) config.getValue("location");
-            bound = new Bound((Location) getConfig().getValue("location"));
+
+            rangePoint = (Location) config.get().get("location");
+            bound = new Bound(rangePoint);
+
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     public void resetBound() {
         bound = null;
         rangePoint = null;
         loadData();
-    }
-
-    public void setBound() {
-        if (bound != null) return;
-        rangePoint = (Location) config.getValue("location");
-        bound = new Bound((Location) getConfig().getValue("location"));
     }
 
 }

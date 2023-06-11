@@ -53,7 +53,7 @@ public class Bound {
         setMaxLoc(locMaxClone);
     }
 
-    public boolean isPlayerWithinBound(Location loc) {
+    public boolean isInBound(Location loc) {
         int minX = (int) getMinLoc().getX();
         int minZ = (int) getMinLoc().getZ();
 
